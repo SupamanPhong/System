@@ -1,0 +1,89 @@
+{
+  "options": {
+    // Select the osquery config plugin.
+    "config_plugin": "filesystem",
+   // Select the osquery logging plugin.
+    "logger_plugin": "filesystem",
+   // The log directory stores info, warning, and errors.
+    // If the daemon uses the 'filesystem' logging retriever then the log_dir
+    // will also contain the query results.
+    //"logger_path": "/var/log/osquery",
+   // Set 'disable_logging' to true to prevent writing any info, warning, error
+    // logs. If a logging plugin is selected it will still write query results.
+    //"disable_logging": "false",
+   // Splay the scheduled interval for queries.
+    // This is very helpful to prevent system performance impact when scheduling
+    // large numbers of queries that run a smaller or similar intervals.
+    //"schedule_splay_percent": "10",
+   // Write the pid of the osqueryd process to a pidfile/mutex.
+    //"pidfile": "/var/osquery/osquery.pidfile",
+   // Clear events from the osquery backing store after a number of seconds.
+    "events_expiry": "3600",
+   // A filesystem path for disk-based backing storage used for events and
+    // query results differentials. See also 'use_in_memory_database'.
+    //"database_path": "/var/osquery/osquery.db",
+   // Comma-delimited list of table names to be disabled.
+    // This allows osquery to be launched without certain tables.
+    //"disable_tables": "foo_bar,time",
+   // Enable debug or verbose debug output when logging.
+    "verbose": "false",
+    "enable_monitor": "true",
+    "disable_events": "false",
+    "host_identifier": "hostname",
+    "schedule_default_interval": "3600",
+    "windows_event_channels":"Security,Microsoft-Windows-Sysmon/Operational"
+ },
+  "schedule": {
+    "outbound_connections": {
+      "query": "select user.username, proc.name, hash.md5, socket.pid, proc.path, proc.cmdline, socket.local_port, socket.remote_port, socket.remote_address from process_open_sockets as socket, processes as proc, users as user, hash as hash where socket.local_port not in (select port from listening_ports) and socket.local_port != 0 and socket.pid = proc.pid and user.uid = proc.uid and hash.path = proc.path and remote_address != '10.15.24.105';",
+      "interval": 30
+    },
+    "listening_ports": {
+      "query": "SELECT username, name, port, protocol,address FROM listening_ports l, processes p, users u WHERE l.pid=p.pid AND p.uid = u.uid;",
+      "interval": 30
+    },
+    "users": {
+      "query": "SELECT * FROM users;",
+      "interval":30
+    },
+    "file_events": {
+      "query": "SELECT username, target_path, md5,action FROM file_events f , users u where u.uid=f.uid AND target_path like '%.php%' OR target_path like '%.asp%' OR target_path like '%cgi%' OR target_path like '%.webconfig';",
+      "interval": 30
+    },
+    "user_logged_in":{
+      "query": "select l.user, l.host,l.time, p.cmdline from logged_in_users l join processes p where l.pid = p.pid and l.type like '%user%';",
+      "interval": 30
+    },
+    "processes": {
+      "query": "SELECT users.username, proc.pid, proc.name, proc.path, proc.cmdline, hash.md5, hash.sha1 from processes as proc, hash as hash, users as users where hash.path = proc.path and  users.uid=proc.uid ;",
+      "interval": 30
+    },
+    "count_connect_per_ip": {
+      "query": "select local_address,(CASE WHEN(SUBSTR(remote_address,0,8)=='::ffff:') THEN SUBSTR(remote_address,8) ELSE remote_address END ) as ra, local_port, count(remote_port) as c from process_open_sockets where (family != 0 and local_port is not null and ra != '0.0.0.0' and ra != '::' ) group by ra,local_port  having c > 50;",
+      "interval": 30
+    },
+    "count_connect_per_port": {
+      "query": "select local_port,count(*) as c from process_open_sockets where family != 0 and local_port is not null and remote_address != '0.0.0.0' and remote_address != '::' group by local_port having c > 50;",
+      "interval": 30
+    },
+
+  },
+  "file_paths": {
+    "home": [
+      "/var/www/html/%%"
+    ] 
+  },
+  "file_accesses": ["homes"],
+  "decorators": {
+    "always": [
+      "SELECT uuid AS host_uuid FROM system_info;",
+      "SELECT address from interface_addresses where address like '10.33%'or address like '10.15%' LIMIT 1"
+    ]
+  },
+//  "decorators": {
+//    "load": [
+//      "SELECT uuid AS host_uuid FROM system_info;",
+//      "SELECT user AS username FROM logged_in_users ORDER BY time DESC LIMIT 1;"
+//    ]
+//  }
+}

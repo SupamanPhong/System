@@ -1,0 +1,22 @@
+<VirtualHost *:80>
+    ServerAdmin admin@example.com
+    ServerName dev.xxx.com
+    ServerAlias www.dev.xxx.com
+    DocumentRoot /home/web/web7.0/dev.xxx.com/
+    ErrorLog /var/log/apache2/dev.xxx.com/error.log
+    CustomLog /var/log/apache2/dev.xxx.com/access.log combined
+    <Directory /home/web/web7.0/dev.xxx.com/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Require all granted
+    </Directory>
+<IfModule mod_fastcgi.c>
+ AddHandler php71-fcgi-www .php
+ Action php70-fcgi-www /php70-fcgi-www
+ Alias /php70-fcgi-www /usr/lib/cgi-bin/php70-fcgi-www
+ FastCgiExternalServer /usr/lib/cgi-bin/php70-fcgi-www -socket /run/php/php7.0-fpm.sock -pass-header Authorization
+ <Directory "/usr/lib/cgi-bin">
+  Require all granted
+ </Directory>
+</IfModule>
+<IfModule mod_fastcgi.c>

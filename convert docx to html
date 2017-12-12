@@ -1,0 +1,7 @@
+import mammoth
+f = open("hochiminh.docx", 'rb')
+b = open('hochiminh.html', 'wb')
+document = mammoth.convert_to_html(f)
+b.write(document.value.encode('utf8'))
+f.close()
+b.close()

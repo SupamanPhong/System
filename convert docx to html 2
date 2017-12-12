@@ -1,0 +1,15 @@
+import os
+import mammoth
+count=0
+for doc in os.listdir(r"C:\Users\phong\PycharmProjects\untitled"):
+    if doc.endswith(".docx"):
+        os.chdir(r"C:\Users\phong\PycharmProjects\untitled")
+        docname = doc.split('.')[0]
+        f = open(doc,'rb')
+        output= open(docname,'wb')
+        document = mammoth.convert_to_html(f)
+        output.write(document.value.encode('utf8'))
+        f.close()
+        output.close()
+        os.rename(docname, docname + ".html")
+

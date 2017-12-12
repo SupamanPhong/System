@@ -1,0 +1,9 @@
+import os
+import mammoth
+count=0
+for doc in os.listdir(r"C:\Users\phong\PycharmProjects\untitled"):
+    if doc.endswith(".docx"):
+        os.chdir(r"C:\Users\phong\PycharmProjects\untitled")
+        os.rename(doc, doc.replace(" ", "-"))
+        docname = os.path.splitext(doc[1])
+        print(docname)

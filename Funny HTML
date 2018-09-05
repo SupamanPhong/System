@@ -1,0 +1,59 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Tôi hỏi bạn bạn có ngu hay không?</title>
+<script language="javascript">
+	var kt=false
+	alert('Ê ! Ta có một số câu hỏi muốn hỏi ngươi ^^ !')
+	alert('Trả lời cho chính xác nghen chưa ! ')
+	alert('Câu hỏi cũng nhẹ nhàng thôi: ')
+	alert('Đó là ...')
+function move()
+{
+	var x = Math.random()*500
+	var y = Math.random()*500
+	var left=x+'px'
+	var top=y+'px'
+	document.getElementById('lbNo').style.left=left
+	document.getElementById('lbNo').style.top=top
+}
+function dongy()
+{
+	if(kt==false)
+	{
+		alert('Hử! Ngu à!')
+		alert('Hỏi thế thôi, thật ra ta biết mi ngu từ lâu rồi ')
+		alert('Ngu từ cái thời cha sinh mẹ đẻ, đần độn, cù lần...')
+		alert('Ngu tới mức trâu bò còn chê')
+		alert('Ngu tới mức đê mê chẳng tỉnh')
+		alert('Ngu dai, ngu lâu, ngu bướng bỉnh...')
+		alert('Thật tình ta cũng thấy tội cho mi ^^')
+		alert('Đứa nào xem xong cái nì rồi chắc tức ói máu ^^~')
+		alert('Sr nhé! Đừng quên send cho bạn của mi')
+		kt=true	
+	}	
+	else
+	{
+		alert('Tạm biệt đồ ngu dốt.^^')
+	}
+}
+</script>
+<style type="text/css">
+<!--
+.style3 {color: #FF0000}
+-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body onunload="dongy()" text="#ff00ff" bgcolor="#000000">
+<center><div id="lbYes" style="position: absolute; left: 100px; top: 202px;">
+<input value="Dạ có!" style="cursor: pointer; color: rgb(0, 0, 0);" onclick="dongy()" type="button">
+</div>
+<div id="lbNo" style="position: absolute; left: 62.8951px; top: 335.577px;">
+<input value="Dạ không!" style="cursor: pointer; color: rgb(0, 0, 0);" onmousemove="move()" type="button">
+</div></center>
+
+<h1 align="center"><span class="style3">Ta hỏi mi có ngu không? </span></h1>
+<p>&nbsp;</p>
+</body></html>
